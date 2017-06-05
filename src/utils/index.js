@@ -35,3 +35,8 @@ export const getTextHourMinutes = (hour, minutes = 0) => {
   }
   return hour > 12 ? `${hour - 12}:${minutes} pm` : `${hour}:${minutes} am`
 }
+
+export const isValidEmail = (email) => {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}

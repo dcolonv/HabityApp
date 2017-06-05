@@ -10,7 +10,9 @@ import { setRoute } from '../store/route/actions'
 export class Login extends Component {
   onLoginClick () {
     const { email, password, authenticate } = this.props
-    authenticate(email, password)
+    if (email && password) {
+      authenticate(email, password)
+    }
   }
 
   onLinkClick () {
@@ -21,47 +23,49 @@ export class Login extends Component {
     const { email, password, setEmail, setPassword } = this.props
     return (
       <View style={styles.container}>
-        <View style={{flex: 1, width: null, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 50}}>
           <Image source={logoImage} />
         </View>
-        <View style={{marginLeft: 20, marginRight: 30, marginBottom: 20}}>
-          <View style={{borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10, flexDirection: 'row', alignItems: 'flex-start'}}>
-            <MaterialIcon name='person-outline' size={30} color='gray' style={{marginTop: 5, marginRight: 20}} />
-            <TextInput
-              style={{height: 40, flex: 1}}
-              autoCapitalize={'none'}
-              autoCorrect={false}
-              placeholder='user@domain.com'
-              value={email}
-              onChangeText={setEmail}
-            />
-          </View>
-          <View style={{borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10, flexDirection: 'row', alignItems: 'flex-start'}}>
-            <MaterialIcon name='lock-outline' size={30} color='gray' style={{marginTop: 5, marginRight: 20}} />
-            <TextInput
-              style={{height: 40, flex: 1}}
-              autoCapitalize={'none'}
-              autoCorrect={false}
-              secureTextEntry
-              placeholder='password'
-              value={password}
-              onChangeText={setPassword}
-            />
-          </View>
-        </View>
-        <TouchableOpacity onPress={this.onLoginClick.bind(this)}>
-          <View style={{alignItems: 'center', margin: 10}}>
-            <View style={styles.button}>
-              <Text style={{color: '#FFF', fontSize: 18}}>Login</Text>
+        <View style={{flexDirection: 'column', justifyContent: 'flex-start'}}>
+          <View style={{marginLeft: 20, marginRight: 30, marginBottom: 20}}>
+            <View style={{borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10, flexDirection: 'row', alignItems: 'flex-start'}}>
+              <MaterialIcon name='person-outline' size={30} color='gray' style={{marginTop: 5, marginRight: 20}} />
+              <TextInput
+                style={{height: 40, flex: 1}}
+                autoCapitalize={'none'}
+                autoCorrect={false}
+                placeholder='user@domain.com'
+                value={email}
+                onChangeText={setEmail}
+              />
+            </View>
+            <View style={{borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10, flexDirection: 'row', alignItems: 'flex-start'}}>
+              <MaterialIcon name='lock-outline' size={30} color='gray' style={{marginTop: 5, marginRight: 20}} />
+              <TextInput
+                style={{height: 40, flex: 1}}
+                autoCapitalize={'none'}
+                autoCorrect={false}
+                secureTextEntry
+                placeholder='password'
+                value={password}
+                onChangeText={setPassword}
+              />
             </View>
           </View>
-        </TouchableOpacity>
-        <View style={{alignItems: 'center', margin: 10, marginBottom: 30}}>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={{fontSize: 13}}>Do not have an account yet? </Text>
-            <TouchableOpacity onPress={this.onLinkClick.bind(this)}>
-              <Text style={{fontSize: 13, color: '#EE105E'}}>Sign Up</Text>
-            </TouchableOpacity>
+          <TouchableOpacity onPress={this.onLoginClick.bind(this)}>
+            <View style={{alignItems: 'center', margin: 10}}>
+              <View style={styles.button}>
+                <Text style={{color: '#FFF', fontSize: 18}}>Login</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+          <View style={{alignItems: 'center', margin: 10, marginBottom: 30}}>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={{fontSize: 13}}>Do not have an account yet? </Text>
+              <TouchableOpacity onPress={this.onLinkClick.bind(this)}>
+                <Text style={{fontSize: 13, color: '#EE105E'}}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -76,7 +80,7 @@ const styles = {
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     backgroundColor: '#FFF'
   },
   button: {

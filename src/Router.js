@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import Login from './views/Login'
 import Signup from './views/Signup'
+import Confirm from './views/Confirm'
 import Main from './views/Main'
 import Daily from './views/Daily'
 
@@ -12,6 +13,8 @@ const Router = ({ route }) => {
       return <Login />
     case '/signup':
       return <Signup />
+    case '/confirm':
+      return <Confirm />
     case '/daily':
       return <Main><Daily /></Main>
     default:
