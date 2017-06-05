@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 
+import Auth from './views/Auth'
 import Login from './views/Login'
 import Signup from './views/Signup'
 import Confirm from './views/Confirm'
@@ -10,15 +11,15 @@ import Daily from './views/Daily'
 const Router = ({ route }) => {
   switch (route) {
     case '/login':
-      return <Login />
+      return <Auth><Login /></Auth>
     case '/signup':
-      return <Signup />
+      return <Auth><Signup /></Auth>
     case '/confirm':
-      return <Confirm />
+      return <Auth><Confirm /></Auth>
     case '/daily':
       return <Main><Daily /></Main>
     default:
-      return <Login />
+      return <Auth><Login /></Auth>
   }
 }
 

@@ -20,38 +20,33 @@ export class Confirm extends Component {
   render () {
     const { confirmationId, setConfirmationId } = this.props
     return (
-      <View style={styles.container}>
-        <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 50}}>
-          <Image source={logoImage} />
+      <View>
+        <View style={{marginLeft: 20, marginRight: 30, marginBottom: 20}}>
+          <View style={{borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10, flexDirection: 'row', alignItems: 'flex-start'}}>
+            <MaterialIcon name='perm-device-information' size={30} color='gray' style={{marginTop: 5, marginRight: 20}} />
+            <TextInput
+              style={{height: 40, flex: 1}}
+              autoCapitalize={'none'}
+              autoCorrect={false}
+              placeholder='confirmation number'
+              value={confirmationId}
+              onChangeText={setConfirmationId}
+            />
+          </View>
         </View>
-        <View style={{flexDirection: 'column', justifyContent: 'flex-start'}}>
-          <View style={{marginLeft: 20, marginRight: 30, marginBottom: 20}}>
-            <View style={{borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10, flexDirection: 'row', alignItems: 'flex-start'}}>
-              <MaterialIcon name='perm-device-information' size={30} color='gray' style={{marginTop: 5, marginRight: 20}} />
-              <TextInput
-                style={{height: 40, flex: 1}}
-                autoCapitalize={'none'}
-                autoCorrect={false}
-                placeholder='confirmation number'
-                value={confirmationId}
-                onChangeText={setConfirmationId}
-              />
+        <TouchableOpacity onPress={this.onConfirmationClick.bind(this)}>
+          <View style={{alignItems: 'center', margin: 10}}>
+            <View style={styles.button}>
+              <Text style={{color: '#FFF', fontSize: 18}}>Confirm</Text>
             </View>
           </View>
-          <TouchableOpacity onPress={this.onConfirmationClick.bind(this)}>
-            <View style={{alignItems: 'center', margin: 10}}>
-              <View style={styles.button}>
-                <Text style={{color: '#FFF', fontSize: 18}}>Confirm</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <View style={{alignItems: 'center', margin: 10, marginBottom: 30}}>
-            <View style={{flexDirection: 'row'}}>
-              <Text style={{fontSize: 13}}>Did not receive a confirmation number? go back to </Text>
-              <TouchableOpacity onPress={this.onLinkClick.bind(this)}>
-                <Text style={{fontSize: 13, color: '#EE105E'}}>Login</Text>
-              </TouchableOpacity>
-            </View>
+        </TouchableOpacity>
+        <View style={{alignItems: 'center', margin: 10, marginBottom: 30}}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{fontSize: 13}}>Did not receive a confirmation number? go back to </Text>
+            <TouchableOpacity onPress={this.onLinkClick.bind(this)}>
+              <Text style={{fontSize: 13, color: '#EE105E'}}>Login</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
