@@ -1,4 +1,3 @@
-import AWS from 'aws-sdk/dist/aws-sdk-react-native'
 import {
   AuthenticationDetails,
   CognitoUser,
@@ -52,7 +51,7 @@ export const confirm = (currentUser, verificationCode) => {
 
     cognitoUser.confirmRegistration(verificationCode, true, (err, result) => {
       if (err) {
-        reject(err)
+        reject(err.message)
       }
       resolve(result)
     })

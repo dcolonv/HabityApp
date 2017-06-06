@@ -1,5 +1,9 @@
-import React, { Component } from 'react'
-import { View, Text } from 'react-native'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { View, Text, TouchableOpacity } from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+
+import { logout } from '../store/auth/actions'
 
 export class Header extends Component {
   constructor (props) {
@@ -16,7 +20,15 @@ export class Header extends Component {
   render () {
     return (
       <View style={styles.containerStyle}>
-        <Text style={styles.textStyle}>{this.state.date.toDateString()}</Text>
+        <View style={{flex: 1}} />
+        <View style={{alignItems: 'center', flex: 8}}>
+          <Text style={styles.textStyle}>{this.state.date.toDateString()}</Text>
+        </View>
+        <View style={{alignItems: 'center', flex: 1}}>
+          <TouchableOpacity onPress={this.props.logout}>
+            <Icon name='exit-to-app' size={20} style={{color: 'rgb(230, 230, 230)'}} />
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }
@@ -24,9 +36,9 @@ export class Header extends Component {
 
 const styles = {
   containerStyle: {
-    height: 20,
+    height: 30,
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: 'rgb(41, 84, 158)',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
@@ -39,4 +51,8 @@ const styles = {
   }
 }
 
-export default Header
+Header.propTypes = {
+  logout: PropTypes.func
+}
+
+export default connect(null, {logout})(Header)

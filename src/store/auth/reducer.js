@@ -5,7 +5,8 @@ import {
   SET_VERIFICATION_CODE,
   SET_CURRENT_USER,
   SET_AUTHENTICATION_ERROR,
-  RESET_FORM
+  RESET_FORM,
+  LOGOUT
 } from './actions'
 
 const INITIAL_STATE = {
@@ -40,6 +41,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         currentUser: '',
         error: null
       }
+    case LOGOUT:
+      return INITIAL_STATE
     default:
       return state
   }

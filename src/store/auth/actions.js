@@ -42,6 +42,11 @@ export const resetForm = () => ({
   type: RESET_FORM
 })
 
+export const LOGOUT = 'auth/LOGOUT'
+export const logout = () => ({
+  type: LOGOUT
+})
+
 // Signup user on cognito
 export const register = (email, password) => {
   return (dispatch) => {
@@ -53,6 +58,7 @@ export const register = (email, password) => {
           dispatch(resetForm())
           dispatch(setCurrentUser(result.user.getUsername()))
           if (!result.userConfirmed) {
+            alert('Sign Up Successful. Check your Email for a verification')
             dispatch(setRoute('/confirm'))
           } else {
             dispatch(setRoute('/login'))
@@ -76,6 +82,7 @@ export const verify = (currentUser, verificationCode) => {
   return (dispatch) => {
     confirm(currentUser, verificationCode)
       .then((result) => {
+        alert('User vefified. Proceed to Login')
         dispatch(resetForm())
         dispatch(setRoute('/login'))
         dispatch(setEmail(currentUser))
@@ -94,6 +101,7 @@ export const login = (email, password) => {
         console.log('login result', result)
         dispatch(resetForm())
         dispatch(setAuthentication(result))
+        dispatch(setRoute('/daily'))
       })
       .catch((reason) => {
         dispatch(setAuthenticationError(reason.message))
