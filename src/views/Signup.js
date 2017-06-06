@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { View, TextInput, Text, TouchableOpacity } from 'react-native'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 
-import { setEmail, setPassword, register } from '../store/auth/actions'
+import { setEmail, setPassword, register, resetForm } from '../store/auth/actions'
 import { setRoute } from '../store/route/actions'
 
 export class Signup extends Component {
@@ -15,14 +15,16 @@ export class Signup extends Component {
   }
 
   onLinkClick () {
-    this.props.setRoute('/login')
+    const { setRoute, resetForm } = this.props
+    setRoute('/login')
+    resetForm()
   }
 
   render () {
     const { email, password, setEmail, setPassword } = this.props
     return (
       <View>
-        <View style={{marginLeft: 20, marginRight: 30, marginBottom: 20}}>
+        <View style={{marginLeft: 25, marginRight: 25, marginBottom: 20}}>
           <View style={{borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10, flexDirection: 'row', alignItems: 'flex-start'}}>
             <MaterialIcon name='person-outline' size={30} color='gray' style={{marginTop: 5, marginRight: 20}} />
             <TextInput
@@ -68,15 +70,6 @@ export class Signup extends Component {
 }
 
 const styles = {
-  backgroundImageStyle: {
-    width: 350
-  },
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    backgroundColor: '#FFF'
-  },
   button: {
     width: 350,
     height: 50,
@@ -93,7 +86,8 @@ Signup.propTypes = {
   setEmail: PropTypes.func,
   setPassword: PropTypes.func,
   register: PropTypes.func,
-  setRoute: PropTypes.func
+  setRoute: PropTypes.func,
+  resetForm: PropTypes.func
 }
 
 const mapStateToProps = (state) => ({
@@ -101,4 +95,10 @@ const mapStateToProps = (state) => ({
   password: state.auth.password
 })
 
-export default connect(mapStateToProps, { setEmail, setPassword, register, setRoute })(Signup)
+export default connect(mapStateToProps, {
+  setEmail,
+  setPassword,
+  register,
+  setRoute,
+  resetForm
+})(Signup)

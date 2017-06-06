@@ -1,4 +1,5 @@
-import { validateAuthenticationForm, signUp } from '../../helpers/cognitoHelper'
+import { validateAuthenticationForm, signUp, confirm, authenticate } from '../../helpers/cognitoHelper'
+import { setRoute } from '../route/actions'
 
 export const SET_EMAIL = 'auth/SET_EMAIL'
 export const setEmail = (email) => ({
@@ -12,10 +13,16 @@ export const setPassword = (password) => ({
   payload: { password }
 })
 
-export const SET_CONFIRMATION_ID = 'auth/SET_CONFIRMATION_ID'
-export const setConfirmationId = (confirmationId) => ({
-  type: SET_CONFIRMATION_ID,
-  payload: { confirmationId }
+export const SET_VERIFICATION_CODE = 'auth/SET_VERIFICATION_CODE'
+export const setVerificationCode = (verificationCode) => ({
+  type: SET_VERIFICATION_CODE,
+  payload: { verificationCode }
+})
+
+export const SET_CURRENT_USER = 'auth/SET_CURRENT_USER'
+export const setCurrentUser = (currentUser) => ({
+  type: SET_CURRENT_USER,
+  payload: { currentUser }
 })
 
 export const SET_AUTHENTICATION_ERROR = 'auth/SET_AUTHENTICATION_ERROR'
@@ -35,26 +42,25 @@ export const resetForm = () => ({
   type: RESET_FORM
 })
 
-export const authenticate = (email, password) => {
-  return (dispatch) => {
-    // do authentication
-    dispatch(resetForm())
-    signUp(email, password)
-    // dispatch(setAuthentication())
-  }
-}
-
+// Signup user on cognito
 export const register = (email, password) => {
   return (dispatch) => {
     validateAuthenticationForm(email, password)
       .then(() => {
         signUp(email, password)
         .then((result) => {
+          console.log('register result', result)
           dispatch(resetForm())
-          console.log(result)
+          dispatch(setCurrentUser(result.user.getUsername()))
+          if (!result.userConfirmed) {
+            dispatch(setRoute('/confirm'))
+          } else {
+            dispatch(setRoute('/login'))
+          }
         })
         .catch((err) => {
           let reason = err.message.split(':').pop() || ''
+          // Replace text Member to Password to do the message clearer for the user
           reason = reason.replace('Member', 'Password')
           dispatch(setAuthenticationError(reason))
         })
@@ -65,8 +71,32 @@ export const register = (email, password) => {
   }
 }
 
-export const confirm = (confirmationId) => {
+// Verify user on cognito
+export const verify = (currentUser, verificationCode) => {
   return (dispatch) => {
-    // TODO: confirmation
+    confirm(currentUser, verificationCode)
+      .then((result) => {
+        dispatch(resetForm())
+        dispatch(setRoute('/login'))
+        dispatch(setEmail(currentUser))
+      })
+      .catch((reason) => {
+        dispatch(setAuthenticationError(reason))
+      })
+  }
+}
+
+// Authenticate user on cognito
+export const login = (email, password) => {
+  return (dispatch) => {
+    authenticate(email, password)
+      .then((result) => {
+        console.log('login result', result)
+        dispatch(resetForm())
+        dispatch(setAuthentication(result))
+      })
+      .catch((reason) => {
+        dispatch(setAuthenticationError(reason.message))
+      })
   }
 }

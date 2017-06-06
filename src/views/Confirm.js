@@ -1,27 +1,34 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { View, TextInput, Text, TouchableOpacity, Image } from 'react-native'
+import { View, TextInput, Text, TouchableOpacity } from 'react-native'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 
-import logoImage from '../assets/img/logobg.png'
-import { setConfirmationId, confirm } from '../store/auth/actions'
+import { setVerificationCode, verify, resetForm } from '../store/auth/actions'
 import { setRoute } from '../store/route/actions'
 
 export class Confirm extends Component {
   onConfirmationClick () {
-    const { confirmationId } = this.props
-    confirm(confirmationId)
+    const { verificationCode, currentUser, verify } = this.props
+    if (currentUser && verificationCode) {
+      verify(currentUser, verificationCode)
+    }
+  }
+
+  onResendClick () {
+
   }
 
   onLinkClick () {
-    this.props.setRoute('/login')
+    const { setRoute, resetForm } = this.props
+    setRoute('/signup')
+    resetForm()
   }
 
   render () {
-    const { confirmationId, setConfirmationId } = this.props
+    const { verificationCode, setVerificationCode, currentUser } = this.props
     return (
       <View>
-        <View style={{marginLeft: 20, marginRight: 30, marginBottom: 20}}>
+        <View style={{marginLeft: 25, marginRight: 25, marginBottom: 10}}>
           <View style={{borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10, flexDirection: 'row', alignItems: 'flex-start'}}>
             <MaterialIcon name='perm-device-information' size={30} color='gray' style={{marginTop: 5, marginRight: 20}} />
             <TextInput
@@ -29,9 +36,12 @@ export class Confirm extends Component {
               autoCapitalize={'none'}
               autoCorrect={false}
               placeholder='confirmation number'
-              value={confirmationId}
-              onChangeText={setConfirmationId}
+              value={verificationCode}
+              onChangeText={setVerificationCode}
             />
+          </View>
+          <View style={{alignItems: 'center'}}>
+            <Text style={{fontSize: 13}}>Verification code sent to {currentUser}</Text>
           </View>
         </View>
         <TouchableOpacity onPress={this.onConfirmationClick.bind(this)}>
@@ -42,10 +52,16 @@ export class Confirm extends Component {
           </View>
         </TouchableOpacity>
         <View style={{alignItems: 'center', margin: 10, marginBottom: 30}}>
+          <View style={{flexDirection: 'row', marginBottom: 10}}>
+            <Text style={{fontSize: 13}}>Did not get the code? </Text>
+            <TouchableOpacity onPress={this.onResendClick.bind(this)}>
+              <Text style={{fontSize: 13, color: '#EE105E'}}>Resend</Text>
+            </TouchableOpacity>
+          </View>
           <View style={{flexDirection: 'row'}}>
-            <Text style={{fontSize: 13}}>Did not receive a confirmation number? go back to </Text>
+            <Text style={{fontSize: 13}}>Incorrect email? go back to </Text>
             <TouchableOpacity onPress={this.onLinkClick.bind(this)}>
-              <Text style={{fontSize: 13, color: '#EE105E'}}>Login</Text>
+              <Text style={{fontSize: 13, color: '#EE105E'}}>Sign Up</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -55,15 +71,6 @@ export class Confirm extends Component {
 }
 
 const styles = {
-  backgroundImageStyle: {
-    width: 350
-  },
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    backgroundColor: '#FFF'
-  },
   button: {
     width: 350,
     height: 50,
@@ -75,14 +82,22 @@ const styles = {
 }
 
 Confirm.propTypes = {
-  confirmationId: PropTypes.string,
-  setConfirmationId: PropTypes.func,
-  confirm: PropTypes.func,
-  setRoute: PropTypes.func
+  verificationCode: PropTypes.string,
+  setVerificationCode: PropTypes.func,
+  currentUser: PropTypes.string,
+  verify: PropTypes.func,
+  setRoute: PropTypes.func,
+  resetForm: PropTypes.func
 }
 
 const mapStateToProps = (state) => ({
-  confirmationId: state.auth.confirmationId
+  verificationCode: state.auth.verificationCode,
+  currentUser: state.auth.currentUser
 })
 
-export default connect(mapStateToProps, { setConfirmationId, confirm, setRoute })(Confirm)
+export default connect(mapStateToProps, {
+  setVerificationCode,
+  verify,
+  setRoute,
+  resetForm
+})(Confirm)

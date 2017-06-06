@@ -2,7 +2,8 @@ import {
   SET_EMAIL,
   SET_PASSWORD,
   SET_AUTHENTICATION,
-  SET_CONFIRMATION_ID,
+  SET_VERIFICATION_CODE,
+  SET_CURRENT_USER,
   SET_AUTHENTICATION_ERROR,
   RESET_FORM
 } from './actions'
@@ -10,7 +11,8 @@ import {
 const INITIAL_STATE = {
   email: '',
   password: '',
-  confirmationId: '',
+  verificationCode: '',
+  currentUser: '',
   error: null,
   auth: null
 }
@@ -21,8 +23,10 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return {...state, email: payload.email}
     case SET_PASSWORD:
       return {...state, password: payload.password}
-    case SET_CONFIRMATION_ID:
-      return {...state, confirmationId: payload.confirmationId}
+    case SET_VERIFICATION_CODE:
+      return {...state, verificationCode: payload.verificationCode}
+    case SET_CURRENT_USER:
+      return {...state, currentUser: payload.currentUser}
     case SET_AUTHENTICATION_ERROR:
       return {...state, error: payload.error}
     case SET_AUTHENTICATION:
@@ -32,7 +36,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
         ...state,
         email: '',
         password: '',
-        confirmationId: '',
+        verificationCode: '',
+        currentUser: '',
         error: null
       }
     default:
