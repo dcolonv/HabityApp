@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { View, TextInput, Text, TouchableOpacity } from 'react-native'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 
-import { setVerificationCode, verify, resetForm, resendVerification } from '../store/auth/actions'
+import { setEmail, verify, resetForm, resendVerification } from '../store/auth/actions'
 import { setRoute } from '../store/route/actions'
 
 export class Confirm extends Component {

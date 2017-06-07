@@ -1,9 +1,9 @@
 import {
   SET_EMAIL,
   SET_PASSWORD,
-  SET_AUTHENTICATION,
+  SET_USER,
   SET_VERIFICATION_CODE,
-  SET_CURRENT_USER,
+  SET_CURRENT_USERNAME,
   SET_AUTHENTICATION_ERROR,
   RESET_FORM,
   LOGOUT
@@ -13,9 +13,9 @@ const INITIAL_STATE = {
   email: '',
   password: '',
   verificationCode: '',
-  currentUser: '',
+  currentUsername: '',
   error: null,
-  auth: null
+  user: null
 }
 
 export default (state = INITIAL_STATE, { type, payload }) => {
@@ -26,19 +26,19 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return {...state, password: payload.password}
     case SET_VERIFICATION_CODE:
       return {...state, verificationCode: payload.verificationCode}
-    case SET_CURRENT_USER:
-      return {...state, currentUser: payload.currentUser}
+    case SET_CURRENT_USERNAME:
+      return {...state, currentUsername: payload.currentUsername}
     case SET_AUTHENTICATION_ERROR:
       return {...state, error: payload.error}
-    case SET_AUTHENTICATION:
-      return {...state, auth: payload.auth}
+    case SET_USER:
+      return {...state, user: payload.user}
     case RESET_FORM:
       return {
         ...state,
         email: '',
         password: '',
         verificationCode: '',
-        currentUser: '',
+        currentUsername: '',
         error: null
       }
     case LOGOUT:

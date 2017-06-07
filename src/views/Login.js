@@ -20,6 +20,9 @@ export class Login extends Component {
     resetForm()
   }
 
+  onRecoveryClick () {
+  }
+
   render () {
     const { email, password, setEmail, setPassword } = this.props
     return (
@@ -57,6 +60,12 @@ export class Login extends Component {
           </View>
         </TouchableOpacity>
         <View style={{alignItems: 'center', margin: 10, marginBottom: 30}}>
+          <View style={{flexDirection: 'row', marginBottom: 10}}>
+            <Text style={{fontSize: 13}}>Forgot your password? </Text>
+            <TouchableOpacity onPress={this.onRecoveryClick.bind(this)}>
+              <Text style={{fontSize: 13, color: '#EE105E'}}>Recover</Text>
+            </TouchableOpacity>
+          </View>
           <View style={{flexDirection: 'row'}}>
             <Text style={{fontSize: 13}}>Do not have an account yet? </Text>
             <TouchableOpacity onPress={this.onLinkClick.bind(this)}>

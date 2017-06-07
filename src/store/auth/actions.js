@@ -1,4 +1,12 @@
-import { validateAuthenticationForm, signUp, confirm, authenticate } from '../../helpers/cognitoHelper'
+import {
+  validateAuthenticationForm,
+  signUp,
+  confirm,
+  resendConfirmationCode,
+  signIn,
+  signOut
+} from '../../helpers/cognitoHelper'
+
 import { setRoute } from '../route/actions'
 
 export const SET_EMAIL = 'auth/SET_EMAIL'
@@ -19,10 +27,10 @@ export const setVerificationCode = (verificationCode) => ({
   payload: { verificationCode }
 })
 
-export const SET_CURRENT_USER = 'auth/SET_CURRENT_USER'
-export const setCurrentUser = (currentUser) => ({
-  type: SET_CURRENT_USER,
-  payload: { currentUser }
+export const SET_CURRENT_USERNAME = 'auth/SET_CURRENT_USERNAME'
+export const setCurrentUsername = (currentUsername) => ({
+  type: SET_CURRENT_USERNAME,
+  payload: { currentUsername }
 })
 
 export const SET_AUTHENTICATION_ERROR = 'auth/SET_AUTHENTICATION_ERROR'
@@ -31,20 +39,15 @@ export const setAuthenticationError = (error) => ({
   payload: { error }
 })
 
-export const SET_AUTHENTICATION = 'auth/SET_AUTHENTICATION'
-export const setAuthentication = (auth) => ({
-  type: SET_AUTHENTICATION,
-  payload: { auth }
+export const SET_USER = 'auth/SET_USER'
+export const setUser = (user) => ({
+  type: SET_USER,
+  payload: { user }
 })
 
 export const RESET_FORM = 'auth/RESET_FORM'
 export const resetForm = () => ({
   type: RESET_FORM
-})
-
-export const LOGOUT = 'auth/LOGOUT'
-export const logout = () => ({
-  type: LOGOUT
 })
 
 // Signup user on cognito
@@ -54,9 +57,8 @@ export const register = (email, password) => {
       .then(() => {
         signUp(email, password)
         .then((result) => {
-          console.log('register result', result)
           dispatch(resetForm())
-          dispatch(setCurrentUser(result.user.getUsername()))
+          dispatch(setCurrentUsername(result.user.getUsername()))
           if (!result.userConfirmed) {
             alert('Sign Up Successful. Check your Email for a verification')
             dispatch(setRoute('/confirm'))
@@ -64,15 +66,15 @@ export const register = (email, password) => {
             dispatch(setRoute('/login'))
           }
         })
-        .catch((err) => {
-          let reason = err.message.split(':').pop() || ''
+        .catch((reason) => {
+          let message = reason.message.split(':').pop() || ''
           // Replace text Member to Password to do the message clearer for the user
-          reason = reason.replace('Member', 'Password')
-          dispatch(setAuthenticationError(reason))
+          message = message.replace('Member', 'Password')
+          dispatch(setAuthenticationError(message))
         })
       })
       .catch((reason) => {
-        dispatch(setAuthenticationError(reason))
+        dispatch(setAuthenticationError(reason.message))
       })
   }
 }
@@ -82,13 +84,26 @@ export const verify = (currentUser, verificationCode) => {
   return (dispatch) => {
     confirm(currentUser, verificationCode)
       .then((result) => {
-        alert('User vefified. Proceed to Login')
+        alert('User verified. Proceed to Login')
         dispatch(resetForm())
         dispatch(setRoute('/login'))
         dispatch(setEmail(currentUser))
       })
       .catch((reason) => {
-        dispatch(setAuthenticationError(reason))
+        dispatch(setAuthenticationError(reason.message))
+      })
+  }
+}
+
+// Rensend verification code
+export const resendVerification = (email) => {
+  return (dispatch) => {
+    resendConfirmationCode(email)
+      .then((result) => {
+        alert('Code was sent again. Check your Email')
+      })
+      .catch((reason) => {
+        dispatch(setAuthenticationError(reason.message))
       })
   }
 }
@@ -96,15 +111,23 @@ export const verify = (currentUser, verificationCode) => {
 // Authenticate user on cognito
 export const login = (email, password) => {
   return (dispatch) => {
-    authenticate(email, password)
-      .then((result) => {
-        console.log('login result', result)
+    signIn(email, password)
+      .then((user) => {
         dispatch(resetForm())
-        dispatch(setAuthentication(result))
+        dispatch(setUser(user))
         dispatch(setRoute('/daily'))
       })
       .catch((reason) => {
         dispatch(setAuthenticationError(reason.message))
       })
+  }
+}
+
+export const LOGOUT = 'auth/LOGOUT'
+export const logout = (cognitoUser) => {
+  return (dispatch) => {
+    signOut(cognitoUser)
+    dispatch({type: LOGOUT})
+    dispatch(resetForm())
   }
 }

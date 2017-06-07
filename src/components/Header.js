@@ -17,6 +17,11 @@ export class Header extends Component {
     this.setState({date: new Date()})
   }
 
+  onLogoutClick () {
+    const { user, logout } = this.props
+    logout(user)
+  }
+
   render () {
     return (
       <View style={styles.containerStyle}>
@@ -25,7 +30,7 @@ export class Header extends Component {
           <Text style={styles.textStyle}>{this.state.date.toDateString()}</Text>
         </View>
         <View style={{alignItems: 'center', flex: 1}}>
-          <TouchableOpacity onPress={this.props.logout}>
+          <TouchableOpacity onPress={this.onLogoutClick.bind(this)}>
             <Icon name='exit-to-app' size={20} style={{color: 'rgb(230, 230, 230)'}} />
           </TouchableOpacity>
         </View>
@@ -52,7 +57,12 @@ const styles = {
 }
 
 Header.propTypes = {
+  user: PropTypes.object,
   logout: PropTypes.func
 }
 
-export default connect(null, {logout})(Header)
+const mapStateToProps = (state) => ({
+  user: state.auth.user
+})
+
+export default connect(mapStateToProps, {logout})(Header)
