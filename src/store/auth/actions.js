@@ -4,7 +4,9 @@ import {
   confirm,
   resendConfirmationCode,
   signIn,
-  signOut
+  signOut,
+  forgot,
+  confirmPassword
 } from '../../helpers/cognitoHelper'
 
 import { setRoute } from '../route/actions'
@@ -51,7 +53,7 @@ export const resetForm = () => ({
 })
 
 // Signup user on cognito
-export const register = (email, password) => {
+export const registerUser = (email, password) => {
   return (dispatch) => {
     validateAuthenticationForm(email, password)
       .then(() => {
@@ -80,7 +82,7 @@ export const register = (email, password) => {
 }
 
 // Verify user on cognito
-export const verify = (currentUser, verificationCode) => {
+export const verifyUser = (currentUser, verificationCode) => {
   return (dispatch) => {
     confirm(currentUser, verificationCode)
       .then((result) => {
@@ -129,5 +131,36 @@ export const logout = (cognitoUser) => {
     signOut(cognitoUser)
     dispatch({type: LOGOUT})
     dispatch(resetForm())
+  }
+}
+
+export const recoverPassword = (email) => {
+  return (dispatch) => {
+    forgot(email)
+      .then((result) => {
+        alert('Check your Email for a verification code to recover')
+        dispatch(resetForm())
+        dispatch(setCurrentUsername(email))
+        dispatch(setRoute('/confirmRecovery'))
+      })
+      .catch((reason) => {
+        dispatch(setAuthenticationError(reason.message))
+      })
+  }
+}
+
+export const verifyRecovery = (email, verificationCode, newPassword) => {
+  return (dispatch) => {
+    confirmPassword(email, verificationCode, newPassword)
+      .then((result) => {
+        alert('Password changed successfully. Proceed to Login')
+        dispatch(resetForm())
+        dispatch(setRoute('/login'))
+        dispatch(setEmail(email))
+      })
+      .catch((reason) => {
+        console.log('verifyRecovery', reason)
+        dispatch(setAuthenticationError(reason.message))
+      })
   }
 }

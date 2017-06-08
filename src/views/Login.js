@@ -21,6 +21,9 @@ export class Login extends Component {
   }
 
   onRecoveryClick () {
+    const { setRoute, resetForm } = this.props
+    setRoute('/recover')
+    resetForm()
   }
 
   render () {

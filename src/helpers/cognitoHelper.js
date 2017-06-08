@@ -95,8 +95,35 @@ export const signIn = (user, password) => {
 }
 
 export const signOut = (cognitoUser) => {
-  console.log('signOut', cognitoUser)
   cognitoUser.signOut((err, result) => {
     console.log('signOut callback', err, result)
+  })
+}
+
+export const forgot = (user) => {
+  return new Promise((resolve, reject) => {
+    const userData = {
+      Username: user,
+      Pool: userPool
+    }
+    const cognitoUser = new CognitoUser(userData)
+    cognitoUser.forgotPassword({
+      onSuccess: resolve,
+      onFailure: reject
+    })
+  })
+}
+
+export const confirmPassword = (user, verificationCode, password) => {
+  return new Promise((resolve, reject) => {
+    const userData = {
+      Username: user,
+      Pool: userPool
+    }
+    const cognitoUser = new CognitoUser(userData)
+    cognitoUser.confirmPassword(verificationCode, password, {
+      onSuccess: resolve,
+      onFailure: reject
+    })
   })
 }

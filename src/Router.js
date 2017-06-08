@@ -5,6 +5,8 @@ import Auth from './views/Auth'
 import Login from './views/Login'
 import Signup from './views/Signup'
 import Confirm from './views/Confirm'
+import Recover from './views/Recover'
+import ConfirmRecovery from './views/ConfirmRecovery'
 import Main from './views/Main'
 import Daily from './views/Daily'
 
@@ -16,6 +18,10 @@ const Router = ({ route }) => {
       return <Auth><Signup /></Auth>
     case '/confirm':
       return <Auth><Confirm /></Auth>
+    case '/recover':
+      return <Auth><Recover /></Auth>
+    case '/confirmRecovery':
+      return <Auth><ConfirmRecovery /></Auth>
     case '/daily':
       return <Main><Daily /></Main>
     default:
