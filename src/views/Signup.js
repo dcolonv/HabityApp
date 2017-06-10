@@ -3,14 +3,14 @@ import { connect } from 'react-redux'
 import { View, TextInput, Text, TouchableOpacity } from 'react-native'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 
-import { setEmail, setPassword, register, resetForm } from '../store/auth/actions'
+import { setEmail, setPassword, registerUser, resetForm } from '../store/auth/actions'
 import { setRoute } from '../store/route/actions'
 
 export class Signup extends Component {
   onSignupClick () {
-    const { email, password, register } = this.props
+    const { email, password, registerUser } = this.props
     if (email && password) {
-      register(email, password)
+      registerUser(email, password)
     }
   }
 
@@ -85,7 +85,7 @@ Signup.propTypes = {
   password: PropTypes.string,
   setEmail: PropTypes.func,
   setPassword: PropTypes.func,
-  register: PropTypes.func,
+  registerUser: PropTypes.func,
   setRoute: PropTypes.func,
   resetForm: PropTypes.func
 }
@@ -98,7 +98,7 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   setEmail,
   setPassword,
-  register,
+  registerUser,
   setRoute,
   resetForm
 })(Signup)
